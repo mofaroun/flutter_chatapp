@@ -1,14 +1,11 @@
+import 'package:chat_app/services/auth/auth_service.dart';
 import 'package:chat_app/components/myButton.dart';
 import 'package:chat_app/components/my_textfield.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_bounceable/flutter_bounceable.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key, this.onTap});
 
-  
   // Email and pw controllers
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -16,13 +13,24 @@ class LoginPage extends StatelessWidget {
   // To go to register Page
 
   final void Function()? onTap;
- 
 
   // Login
 
-  void login() {
+  void login(BuildContext context) async {
     // Login Method
-    print("Clicked Login");
+    final authService = AuthService();
+
+    try {
+      await authService.signInWithEmailPassword(
+          _emailController.text, _passwordController.text);
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(e.toString()),
+        ),
+      );
+    }
   }
 
   @override
@@ -70,25 +78,26 @@ class LoginPage extends StatelessWidget {
 
               const SizedBox(height: 30),
               // Login Button
-              MyButton(label: "Login", onTap: login),
+              MyButton(label: "Login", onTap: () => login (context),),
 
               // Register Text
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Not a member? ",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.inversePrimary,
-                  ),),
+                  Text(
+                    "Not a member? ",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                    ),
+                  ),
                   GestureDetector(
                     onTap: onTap,
-                    child: Text(
-                      "Register Now",
-                      style: TextStyle(fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                      )
-                    ),
+                    child: Text("Register Now",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                        )),
                   ),
                 ],
               ),

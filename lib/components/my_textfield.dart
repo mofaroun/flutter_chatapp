@@ -5,8 +5,13 @@ class MyTextField extends StatelessWidget {
   final bool pw;
   final TextEditingController controller;
 
-  const MyTextField({super.key, required this.hintText, required this.pw, required this.controller});
+  const MyTextField(
+      {super.key,
+      required this.hintText,
+      required this.pw,
+      required this.controller});
 
+  
   @override
   Widget build(BuildContext context) {
     return Padding(
